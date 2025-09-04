@@ -128,7 +128,8 @@ final readonly class Store implements ManagedStoreInterface, StoreInterface
         $id = $data['uuid'] ?? throw new InvalidArgumentException('Missing "id" field in the document data.');
 
         $vector = !\array_key_exists('vector', $data) || null === $data['vector']
-            ? new NullVector() : new Vector($data['vector']);
+            ? new NullVector()
+            : new Vector($data['vector']);
 
         return new VectorDocument(Uuid::fromString($id), $vector, new Metadata(json_decode($data['_metadata'], true)));
     }
