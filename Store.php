@@ -98,9 +98,13 @@ final readonly class Store implements ManagedStoreInterface, StoreInterface
             $finalPayload['json'] = $payload;
         }
 
-        $result = $this->httpClient->request($method, $url, $finalPayload);
+        $response = $this->httpClient->request($method, $url, $finalPayload);
 
-        return $result->toArray();
+        if (200 === $response->getStatusCode() && '' === $response->getContent(false)) {
+            return [];
+        }
+
+        return $response->toArray();
     }
 
     /**
