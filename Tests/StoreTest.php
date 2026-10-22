@@ -369,4 +369,20 @@ final class StoreTest extends TestCase
         $this->assertSame(42, $store->count());
         $this->assertSame(1, $httpClient->getRequestsCount());
     }
+
+    public function testStoreSendsIntegrationHeader()
+    {
+        $headers = [];
+        $httpClient = new MockHttpClient(static function (string $method, string $url, array $options) use (&$headers) {
+            $headers = $options['normalized_headers']['x-weaviate-client-integration'] ?? [];
+
+            return new JsonMockResponse(['classes' => []]);
+        }, 'http://127.0.0.1:8080');
+
+        $store = new Store($httpClient, 'test');
+        $store->drop();
+
+        $this->assertCount(1, $headers);
+        $this->assertMatchesRegularExpression('#^X-Weaviate-Client-Integration: symfony-ai/\S+$#', $headers[0]);
+    }
 }

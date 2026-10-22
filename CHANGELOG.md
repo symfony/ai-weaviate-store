@@ -1,6 +1,11 @@
 CHANGELOG
 =========
 
+0.15
+----
+
+ * Add the `X-Weaviate-Client-Integration` header to every request to identify Symfony AI to Weaviate
+
 0.14
 ----
 
